@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    {% if session.get('email') %}
+        {% if 'admin' in session.get('roles') %}
+            {% include 'admin_dashboard.html' %}
+        {%else %}
+            {% include 'user_dashboard.html' %}
+        {%endif %}
+    {% else %}
+    <h1>Welcome to the Grocery Store</h1>
+    <p>Please <a href="{{ url_for('login') }}">login</a>
+    or <a href="{{ url_for('register') }}">register</a> to continue.</p>
+
+    {% endif %}
+</div>
+
+{% endblock %}

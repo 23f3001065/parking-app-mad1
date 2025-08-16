@@ -1,0 +1,42 @@
+{% extends 'index.html' %}
+
+{% block title %} Add Product {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-6 m-3">
+            <h1>Add Product</h1>
+            
+            <form method="post" action="{{url_for('add_product')}}">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="name">
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="exampleInputPassword1" name="price">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Category</label>
+                            <select class="form-select" aria-label="Default select example" name = "category_id">
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{%endblock%}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Parking Lot - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4><i class="fas fa-edit"></i> Edit Parking Lot</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Location Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        <input type="text" class="form-control" id="name" name="name" 
+                                               value="{{ parking_lot.prime_location_name }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="pin_code" class="form-label">Pin Code</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-pin"></i></span>
+                                        <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                               value="{{ parking_lot.pin_code }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-home"></i></span>
+                                <textarea class="form-control" id="address" name="address" rows="3" required>{{ parking_lot.address }}</textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price per Hour (₹)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-rupee-sign"></i></span>
+                                        <input type="number" class="form-control" id="price" name="price" 
+                                               step="0.01" min="0" value="{{ parking_lot.price }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="max_spots" class="form-label">Maximum Number of Spots</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-car"></i></span>
+                                        <input type="number" class="form-control" id="max_spots" name="max_spots" 
+                                               min="1" value="{{ parking_lot.maximum_number_of_spots }}" required>
+                                    </div>
+                                    <div class="form-text">
+                                        Current spots: {{ parking_lot.parking_spots|length }}
+                                        ({{ parking_lot.occupied_spots_count }} occupied)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save"></i> Update Parking Lot
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

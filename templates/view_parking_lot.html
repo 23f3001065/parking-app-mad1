@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}View Parking Lot - {{ parking_lot.prime_location_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="fas fa-eye"></i> {{ parking_lot.prime_location_name }}</h2>
+                    <p class="text-muted">{{ parking_lot.address }} - {{ parking_lot.pin_code }}</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parking Lot Info -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-rupee-sign fa-2x mb-2"></i>
+                    <h4>₹{{ parking_lot.price }}</h4>
+                    <p class="mb-0">Per Hour</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-car fa-2x mb-2"></i>
+                    <h4>{{ parking_lot.maximum_number_of_spots }}</h4>
+                    <p class="mb-0">Total Spots</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <h4>{{ parking_lot.available_spots_count }}</h4>
+                    <p class="mb-0">Available</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-times-circle fa-2x mb-2"></i>
+                    <h4>{{ parking_lot.occupied_spots_count }}</h4>
+                    <p class="mb-0">Occupied</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parking Spots Grid -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-th"></i> Parking Spots Layout</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="parking-spot spot-available">A</span> Available
+                        <span class="parking-spot spot-occupied ms-3">O</span> Occupied
+                    </div>
+                    <div class="parking-grid">
+                        {% for spot in parking_spots %}
+                            <div class="parking-spot 
+                                {{ 'spot-available' if spot.status == 'A' else 'spot-occupied' }}"
+                                title="Spot {{ spot.spot_number }} - {{ 'Available' if spot.status == 'A' else 'Occupied' }}">
+                                {{ spot.spot_number }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Reservations -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-users"></i> Active Reservations</h5>
+                </div>
+                <div class="card-body">
+                    {% if active_reservations %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Spot Number</th>
+                                        <th>User Email</th>
+                                        <th>Vehicle Number</th>
+                                        <th>Parked Since</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for reservation, user, spot in active_reservations %}
+                                    <tr>
+                                        <td><strong>{{ spot.spot_number }}</strong></td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ reservation.vehicle_number or 'Not provided' }}</td>
+                                        <td>{{ reservation.parking_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>
+                                            {% set duration = (current_time - reservation.parking_timestamp).total_seconds() / 3600 %}
+                                            {{ "%.1f"|format(duration) }} hours
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-car fa-3x text-muted mb-3"></i>
+                            <h5>No active reservations</h5>
+                            <p class="text-muted">All parking spots are currently available.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.parking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 8px;
+    max-width: 800px;
+}
+</style>
+{% endblock %}
